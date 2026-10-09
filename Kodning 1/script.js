@@ -8,6 +8,8 @@ const removeLastBtn = document.querySelector("#removeLastBtn");
 const titlesBtn = document.querySelector("#titlesBtn");
 const clearBtn = document.querySelector("#clearBtn");
 const ratingInput = document.querySelector("#rating");
+const movieList = document.querySelector("#movieList");
+const averageText = document.querySelector("#average");
 
 let movies = [];
 
@@ -24,6 +26,32 @@ function save() {
   const text = JSON.stringify(movies);
   localStorage.setItem("movies", text);
 }
+
+
+function render(){
+    movieList.textContent = "";
+
+    for(let i = 0; i < movies.length; i++){
+        const li = document.createElement("li");
+        const label = movies[i].rating >= 7 ? "Good" : "Weak";
+        const titleElement = document.createElement("h3");
+        const directorElement = document.createElement("p");
+        const ratingElement = document.createElement("p");
+        const reviewElement = document.createElement("p");
+        titleElement.textContent = movies[i].title;
+        directorElement.textContent = `Directed by ${movies[i].director}`;
+        ratingElement.textContent = `${movies[i].rating}/10 - ${label}`;
+        reviewElement.textContent = movies[i].review;
+        li.appendChild(titleElement)
+        li.appendChild(directorElement);
+        li.appendChild(ratingElement);
+        li.appendChild(reviewElement);
+        movieList.appendChild(li);
+    }
+
+}
+
+render();
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -94,6 +122,7 @@ form.addEventListener("submit", function (event) {
 
   movies.push(newMovie);
   save();
+  render();
 
   titleInput.value = "";
   directorInput.value = "";
@@ -115,6 +144,7 @@ listBtn.addEventListener("click", function () {
 removeLastBtn.addEventListener("click", function () {
   movies.pop();
   save();
+  render();
   console.log("Removed last. Left: " + movies.length);
 });
 
